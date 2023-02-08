@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "Application Submitted";
+}
+
+@model MovieCollectionApp.Models.MovieInput
+
+@if (Model.Year < 2013)
+{
+<h2>Movie Recorded. Thank you! @Model.Director sure did a great job!</h2>
+<h3>(Although, how you have time for this, I do not know.)</h3>
+<h4>ALSO, why are you watching movies made when dinosaurs roamed?</h4>
+}
+else
+{
+<h2>Movie Recorded. Thank you! @Model.Director sure did a great job!</h2>
+<h3>(Although, how you have time for this, I do not know.)</h3>
+}
+
+
