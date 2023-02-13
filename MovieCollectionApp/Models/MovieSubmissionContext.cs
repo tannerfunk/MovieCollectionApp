@@ -16,6 +16,8 @@ namespace MovieCollectionApp.Models
 
         public DbSet<MovieInput> Inputs { get; set; }
 
+
+        //seed database with my three favorite movies
         protected override void OnModelCreating(ModelBuilder mb)
         {
             mb.Entity<MovieInput>().HasData(

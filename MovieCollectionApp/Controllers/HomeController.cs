@@ -35,6 +35,7 @@ namespace MovieCollectionApp.Controllers
         [HttpPost]
         public IActionResult InputMovie (MovieInput mi)
         {
+            //check to see if the input is valid before trying to add it to the database
             if (ModelState.IsValid)
             {
                 movieContext.Add(mi);
