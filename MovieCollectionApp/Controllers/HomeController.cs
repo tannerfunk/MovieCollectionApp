@@ -12,10 +12,13 @@ namespace MovieCollectionApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private MovieSubmissionContext movieContext { get; set; }
 
-        public HomeController(ILogger<HomeController> logger)
+        // Constructor
+        public HomeController(ILogger<HomeController> logger, MovieSubmissionContext someName)
         {
             _logger = logger;
+            movieContext = someName;
         }
 
         public IActionResult Index()
@@ -32,7 +35,21 @@ namespace MovieCollectionApp.Controllers
         [HttpPost]
         public IActionResult InputMovie (MovieInput mi)
         {
-            return View("Confirmation", mi);
+            if (ModelState.IsValid)
+            {
+                movieContext.Add(mi);
+                movieContext.SaveChanges();
+
+                return View("Confirmation", mi);
+            }
+            return View("InputMovieComponent");
+
+        }
+
+        [HttpGet]
+        public IActionResult Podcast()
+        {
+            return View("PodcastTown");
         }
 
         public IActionResult Privacy()
