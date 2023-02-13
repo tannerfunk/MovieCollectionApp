@@ -8,6 +8,7 @@ namespace MovieCollectionApp.Models
 {
     public class MovieInput
     {
+        //make this the key and make the inputs that are required, required!
         [Key]
         [Required]
         public int MovieId { get; set; }
