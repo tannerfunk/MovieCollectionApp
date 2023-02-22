@@ -13,12 +13,9 @@ namespace MovieCollectionApp.Models
         public int MovieId { get; set; }
 
         [Required]
-        public string Category { get; set; }
-
-        [Required]
         public string Title { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="You'll need to put in a year..")]
         public int Year { get; set; }
 
         [Required]
@@ -33,6 +30,12 @@ namespace MovieCollectionApp.Models
 
         [MaxLength(25)]
         public string Note { get; set; }
+
+
+        // Build Foreign Key Relationships
+        [Required]
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
 
     }
 }

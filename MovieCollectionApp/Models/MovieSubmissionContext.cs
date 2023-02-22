@@ -16,26 +16,42 @@ namespace MovieCollectionApp.Models
 
         public DbSet<MovieInput> Inputs { get; set; }
 
+        public DbSet<Category> Category { get; set; }
+
+
+        //Seeding the data
         protected override void OnModelCreating(ModelBuilder mb)
         {
+
+            mb.Entity<Category>().HasData(
+                new Category { CategoryId = 1, CategoryName="Action/Adventure"},
+                new Category { CategoryId = 2, CategoryName = "Comedy" },
+                new Category { CategoryId = 3, CategoryName = "Family" },
+                new Category { CategoryId = 4, CategoryName = "Drama" },
+                new Category { CategoryId = 5, CategoryName = "Horror/Suspense" },
+                new Category { CategoryId = 6, CategoryName = "Miscellaneous" },
+                new Category { CategoryId = 7, CategoryName = "Television" },
+                new Category { CategoryId = 8, CategoryName = "VHS" }
+                );
+
             mb.Entity<MovieInput>().HasData(
 
                 new MovieInput
                 {
                     MovieId = 1,
-                    Category = "Action/Adventure",
+                    CategoryId = 1,
                     Title = "The Avengers",
                     Year = 2012,
                     Director = "Joss Whedon",
                     Rating = "PG-13",
                     Edited = false,
                     LentTo = "",
-                    Note = ""
+                    Note = "",
                 },
                 new MovieInput
                 {
                     MovieId = 2,
-                    Category = "Comedy",
+                    CategoryId = 2,
                     Title = "Madagascar",
                     Year = 2005,
                     Director = "Eric Darnell, Tom McGrath",
@@ -47,7 +63,7 @@ namespace MovieCollectionApp.Models
                 new MovieInput
                 {
                     MovieId = 3,
-                    Category = "Family",
+                    CategoryId = 3,
                     Title = "Moana",
                     Year = 2016,
                     Director = "Ron Clements, John Musker",

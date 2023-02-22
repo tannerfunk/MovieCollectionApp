@@ -8,7 +8,7 @@ using MovieCollectionApp.Models;
 namespace MovieCollectionApp.Migrations
 {
     [DbContext(typeof(MovieSubmissionContext))]
-    [Migration("20230213185941_Initial")]
+    [Migration("20230222002440_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -17,15 +17,70 @@ namespace MovieCollectionApp.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.32");
 
+            modelBuilder.Entity("MovieCollectionApp.Models.Category", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CategoryName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CategoryId");
+
+                    b.ToTable("Category");
+
+                    b.HasData(
+                        new
+                        {
+                            CategoryId = 1,
+                            CategoryName = "Action/Adventure"
+                        },
+                        new
+                        {
+                            CategoryId = 2,
+                            CategoryName = "Comedy"
+                        },
+                        new
+                        {
+                            CategoryId = 3,
+                            CategoryName = "Family"
+                        },
+                        new
+                        {
+                            CategoryId = 4,
+                            CategoryName = "Drama"
+                        },
+                        new
+                        {
+                            CategoryId = 5,
+                            CategoryName = "Horror/Suspense"
+                        },
+                        new
+                        {
+                            CategoryId = 6,
+                            CategoryName = "Miscellaneous"
+                        },
+                        new
+                        {
+                            CategoryId = 7,
+                            CategoryName = "Television"
+                        },
+                        new
+                        {
+                            CategoryId = 8,
+                            CategoryName = "VHS"
+                        });
+                });
+
             modelBuilder.Entity("MovieCollectionApp.Models.MovieInput", b =>
                 {
                     b.Property<int>("MovieId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Director")
                         .IsRequired()
@@ -54,13 +109,15 @@ namespace MovieCollectionApp.Migrations
 
                     b.HasKey("MovieId");
 
+                    b.HasIndex("CategoryId");
+
                     b.ToTable("Inputs");
 
                     b.HasData(
                         new
                         {
                             MovieId = 1,
-                            Category = "Action/Adventure",
+                            CategoryId = 1,
                             Director = "Joss Whedon",
                             Edited = false,
                             LentTo = "",
@@ -72,7 +129,7 @@ namespace MovieCollectionApp.Migrations
                         new
                         {
                             MovieId = 2,
-                            Category = "Comedy",
+                            CategoryId = 2,
                             Director = "Eric Darnell, Tom McGrath",
                             Edited = false,
                             LentTo = "",
@@ -84,7 +141,7 @@ namespace MovieCollectionApp.Migrations
                         new
                         {
                             MovieId = 3,
-                            Category = "Family",
+                            CategoryId = 3,
                             Director = "Ron Clements, John Musker",
                             Edited = false,
                             LentTo = "",
@@ -93,6 +150,15 @@ namespace MovieCollectionApp.Migrations
                             Title = "Moana",
                             Year = 2016
                         });
+                });
+
+            modelBuilder.Entity("MovieCollectionApp.Models.MovieInput", b =>
+                {
+                    b.HasOne("MovieCollectionApp.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

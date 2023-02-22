@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MovieCollectionApp.Models;
 using System;
@@ -11,13 +12,11 @@ namespace MovieCollectionApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private MovieSubmissionContext movieContext { get; set; }
 
         // Constructor
-        public HomeController(ILogger<HomeController> logger, MovieSubmissionContext someName)
+        public HomeController(MovieSubmissionContext someName)
         {
-            _logger = logger;
             movieContext = someName;
         }
 
@@ -29,6 +28,8 @@ namespace MovieCollectionApp.Controllers
         [HttpGet]
         public IActionResult InputMovie ()
         {
+            ViewBag.Categories = movieContext.Category.ToList();
+
             return View("InputMovieComponent");
         }
 
@@ -42,7 +43,8 @@ namespace MovieCollectionApp.Controllers
 
                 return View("Confirmation", mi);
             }
-            return View("InputMovieComponent");
+            ViewBag.Categories = movieContext.Category.ToList();
+            return View("InputMovieComponent", mi);
 
         }
 
@@ -52,15 +54,52 @@ namespace MovieCollectionApp.Controllers
             return View("PodcastTown");
         }
 
-        public IActionResult Privacy()
+        [HttpGet]
+        public IActionResult MovieList ()
         {
-            return View();
+            var entries = movieContext.Inputs
+                .Include(x => x.Category)
+                //.Where(x => x.Year > 2010) THIS FILTERS
+                .OrderBy(x => x.Title)
+                .ToList();
+
+            return View(entries);
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [HttpGet]
+        public IActionResult Edit (int movieid)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            ViewBag.Categories = movieContext.Category.ToList();
+
+            var entry = movieContext.Inputs.Single(x => x.MovieId == movieid);
+
+            return View("InputMovieComponent", entry);
+        }
+
+        [HttpPost]
+        public IActionResult Edit (MovieInput miupdate)
+        {
+            movieContext.Update(miupdate);
+            movieContext.SaveChanges();
+
+            // this is so that it doesn't JUST go to the view, but it does the same thing as before.
+            return RedirectToAction("MovieList");
+        }
+
+        [HttpGet]
+        public IActionResult Delete(int movieid)
+        {
+            var entry = movieContext.Inputs.Single(x => x.MovieId == movieid);
+
+            return View(entry);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(MovieInput mi)
+        {
+            movieContext.Inputs.Remove(mi);
+            movieContext.SaveChanges();
+            return RedirectToAction("MovieList");
         }
     }
 }
